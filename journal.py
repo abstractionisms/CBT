@@ -191,6 +191,21 @@ def open_text():
         else:
             messagebox.showwarning("Warning", "No password provided. Cannot decrypt the file.")
 
+def toggle_theme():
+    global dark_mode
+    dark_mode = not dark_mode  # Flip the dark_mode flag
+    
+    bg_color = "black" if dark_mode else "white"
+    fg_color = "white" if dark_mode else "black"
+    
+    # Update the colors of your widgets
+    root.config(bg=bg_color)
+    text_box.config(bg=bg_color, fg=fg_color)
+
+dark_mode = False  # Initial mode
+toggle_button = tk.Button(root, text="Toggle Dark/Light Mode", command=toggle_theme)
+toggle_button.grid(row=6, column=0, columnspan=2)
+
 save_button = tk.Button(root, text = "Encrypt & Save", command = save_text)
 open_button = tk.Button(root, text = "Open", command = open_text)
 open_button.grid(row=5, column=0, columnspan=2)
