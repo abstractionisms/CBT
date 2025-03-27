@@ -1,4 +1,5 @@
 import tkinter as tk
+import os
 from tkinter import simpledialog, messagebox, filedialog, font
 import datetime
 import random
@@ -18,15 +19,9 @@ def get_random_prompt(prompt_dict):
     prompt = random.choice(prompt_dict[category])
     return prompt
 
-prompt_label = tk.Label(root, text=get_random_prompt(prompts), wraplength=500)
-prompt_label.grid(row=0, column=0, sticky='nsew')
-
 def change_prompt():
     new_prompt = get_random_prompt(prompts)
     prompt_label.config(text=new_prompt)
-
-change_prompt_button = tk.Button(root, text="Change Prompt", command=change_prompt)
-change_prompt_button.grid(row=3, column=0, padx=5, pady=5, sticky='ew')
 
 # Font customization
 font_family = tk.StringVar(root)
@@ -34,20 +29,26 @@ font_family.set("Calibri")  # Default font
 font_size = tk.IntVar(root)
 font_size.set(12)  # Default size
 
+text_box = tk.Text(root, width=50, height=10, wrap=tk.WORD, font=(font_family.get(), font_size.get()))
+text_box.grid(row=0, column=1, sticky='nsew')
+
+prompt_label = tk.Label(root, text=get_random_prompt(prompts), wraplength=500)
+prompt_label.grid(row=1, column=1, sticky='nsew')
+
+change_prompt_button = tk.Button(root, text="Change Prompt", command=change_prompt)
+change_prompt_button.grid(row=2, column=0, padx=5, pady=5, sticky='ew')
+
 font_family_menu = tk.OptionMenu(root, font_family, "Calibri", "Arial", "Times", "Courier")
-font_family_menu.grid(row=3, column=1, padx=5, pady=5, sticky='ew')
+font_family_menu.grid(row=2, column=1, padx=5, pady=5, sticky='ew')
 
 font_size_menu = tk.OptionMenu(root, font_size, 10, 12, 14, 16, 18)
-font_size_menu.grid(row=3, column=2, padx=5, pady=5, sticky='ew')
+font_size_menu.grid(row=2, column=2, padx=5, pady=5, sticky='ew')
 
 def update_font():
     text_box.config(font=(font_family.get(), font_size.get()))
 
 update_font_button = tk.Button(root, text="Update Font", command=update_font)
-update_font_button.grid(row=4, column=0, columnspan=3, padx=5, pady=5, sticky='ew')
-
-text_box = tk.Text(root, width=50, height=10, wrap=tk.WORD, font=(font_family.get(), font_size.get()))
-text_box.grid(row=0, column=1, sticky='nsew')
+update_font_button.grid(row=3, column=0, columnspan=3, padx=5, pady=5, sticky='ew')
 
 def count_chars(event):
     s = text_box.get("1.0", 'end-1c')
@@ -61,9 +62,6 @@ def count_chars(event):
         canvas.coords(rectangle, 0, 500, 20, 500 - min(len(s)*500/1500, 500))
 
 text_box.bind('<KeyRelease>', count_chars)
-
-label = tk.Label(root, text="Characters: 0 Words: 0")
-label.grid(row=1, column=0, columnspan=2, sticky='ew')
 
 canvas = tk.Canvas(root, width=20, height=500)
 canvas.grid(row=0, column=2, sticky='ns')
@@ -101,7 +99,6 @@ def toggle_theme():
     root.config(bg=bg_color)
     text_box_bg = "black" if dark_mode else "white"
     text_box_fg = "white" if dark_mode else "black"
-    text_box_bd = "white" if dark_mode else "black"
     text_box.config(bg=text_box_bg, fg=text_box_fg, bd=2, relief=tk.SOLID)
 
     button_bg = "black" if dark_mode else "SystemButtonFace"
@@ -151,6 +148,9 @@ open_button.grid(row=5, column=1, padx=5, pady=5, sticky='ew')
 
 toggle_button = tk.Button(root, text="Toggle Dark/Light Mode", command=toggle_theme)
 toggle_button.grid(row=6, column=0, columnspan=3, sticky='ew')
+
+label = tk.Label(root, text="Characters: 0 Words: 0")
+label.grid(row=7, column=0, columnspan=2, sticky='ew')
 
 save_button = tk.Button(root, text="Encrypt & Save", command=save_text)
 

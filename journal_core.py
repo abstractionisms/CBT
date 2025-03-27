@@ -38,8 +38,7 @@ def generate_key(password: bytes, salt: bytes):
     return base64.urlsafe_b64encode(kdf.derive(password))
 
 def encrypt_message(message: bytes, password: str):
-    """Encrypts a message using Fernet encryption."""
-    salt = generate_salt()
+    salt = os.urandom(16)  # Generates a secure random salt
     key = generate_key(password.encode(), salt)
     f = Fernet(key)
     encrypted_message = f.encrypt(message)
